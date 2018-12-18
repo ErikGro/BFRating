@@ -26,7 +26,8 @@ Pod::Spec.new do |s|
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Matthias Nagel' => 'matthias@bitfactory.io' }
   s.source           = { :git => 'https://github.com/bitfactoryio/BFRating.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.social_media_url = 'https://twitter.com/bitfactoryio'
+  s.swift_version = '4.0'
 
   s.ios.deployment_target = '11.0'
 
