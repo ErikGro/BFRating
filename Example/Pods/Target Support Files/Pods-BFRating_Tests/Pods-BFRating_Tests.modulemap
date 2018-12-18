@@ -1,0 +1,6 @@
+framework module Pods_BFRating_Tests {
+  umbrella header "Pods-BFRating_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

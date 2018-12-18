@@ -1,0 +1,11 @@
+platform :ios, '11.0'
+use_frameworks!
+
+target 'BFRating_Example' do
+  pod 'BFRating', :path => '../'
+
+  target 'BFRating_Tests' do
+    inherit! :search_paths
+
+  end
+end

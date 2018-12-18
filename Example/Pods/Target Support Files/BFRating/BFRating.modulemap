@@ -1,0 +1,6 @@
+framework module BFRating {
+  umbrella header "BFRating-umbrella.h"
+
+  export *
+  module * { export * }
+}
