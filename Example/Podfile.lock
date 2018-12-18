@@ -1,5 +1,5 @@
 PODS:
-  - BFRating (0.1.0):
+  - BFRating (1.0.0):
     - Localize-Swift
     - SwiftyUserDefaults (= 4.0.0-alpha.1)
   - Localize-Swift (2.0.0)
@@ -18,7 +18,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  BFRating: e3f4b43b9c2ded3729264f7daf92a4a81095b9a4
+  BFRating: 307806d7f5d24aea3a39c1b3e2bfb977847aa710
   Localize-Swift: c798ec9286494866f7068f85f7c71283ac5bdab4
   SwiftyUserDefaults: cebe0ff9472f52699772a514b6f7155861d8069b
 
