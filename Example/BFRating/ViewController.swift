@@ -19,12 +19,15 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        _ = RatingProvider(self, onFeedback: {
+        let ratingProvider = RatingProvider()
+        ratingProvider.alertTintColor = UIColor.green //Default value UIColor.blue
+        ratingProvider.showAfterDays = 10 // Default value 14
+        ratingProvider.showAfterViewCount = 3 // Default value 5
+        ratingProvider.show(self) {
             if MFMailComposeViewController.canSendMail() {
                 let mail = MFMailComposeViewController()
                 self.present(mail, animated: true)
             }
-        }, showAfterViewCount: 1,
-           alertTintColor: UIColor.red)
+        }
     }
 }

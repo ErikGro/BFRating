@@ -36,23 +36,31 @@ import Localize_Swift
 
 public class RatingProvider {
     
-    private let controller: UIViewController!
+    private let dayInSeconds: Int = 86400
     
-    private let tintColor: UIColor!
+    private var controller: UIViewController!
     
-    public init(_ controller: UIViewController,
-                onFeedback: @escaping() -> (),
-                showAfterViewCount: Int? = 5,
-                alertTintColor: UIColor? = UIColor.blue) {
+    public var showAfterViewCount: Int = 5
+    
+    public var showAfterDays: Int = 14
+    
+    public var alertTintColor: UIColor = UIColor.blue
+    
+    public init() {
+    }
+    
+    public func show(_ controller: UIViewController,
+                onFeedback: @escaping() -> ()) {
         
         self.controller = controller
-        self.tintColor = alertTintColor
         
-        if !Defaults.hasKey(.appStarts) {
-            Defaults[.appStarts] = 0
-        }
+        setup()
         
         if Defaults[.appStarts] == -1 {
+            return
+        }
+        
+        if Defaults[.firstTimestamp] + (showAfterDays * dayInSeconds) > Int(NSDate().timeIntervalSince1970) {
             return
         }
         
@@ -66,9 +74,20 @@ public class RatingProvider {
             }
         }
     }
-    
+
     public func reset() {
         Defaults[.appStarts] = 0
+        Defaults[.firstTimestamp] = Int(NSDate().timeIntervalSince1970)
+    }
+    
+    private func setup() {
+        if !Defaults.hasKey(.appStarts) {
+            Defaults[.appStarts] = 0
+        }
+        
+        if !Defaults.hasKey(.firstTimestamp) {
+            Defaults[.firstTimestamp] = Int(NSDate().timeIntervalSince1970)
+        }
     }
     
     private func showLikeAlert(onFeedback: @escaping() -> ()) {
@@ -83,7 +102,7 @@ public class RatingProvider {
         let alert = UIAlertController(title: nil,
                                       message: String(format: "ShowLikeAlert_Message".localized(), appName),
                                       preferredStyle: .alert)
-        alert.view.tintColor = tintColor
+        alert.view.tintColor = alertTintColor
         
         let noAction = UIAlertAction(title: "No".localized(), style: .cancel) { action in
             self.showFeedbackAlert(onFeedback: {
@@ -94,6 +113,7 @@ public class RatingProvider {
         alert.addAction(noAction)
         
         let yesAction = UIAlertAction(title: "Yes".localized(), style: .default) { action in
+            self.reset()
             SKStoreReviewController.requestReview()
         }
         
@@ -106,7 +126,7 @@ public class RatingProvider {
         let alert = UIAlertController(title: nil,
                                       message: "ShowFeedbackAlert_Message".localized(),
                                       preferredStyle: .alert)
-        alert.view.tintColor = tintColor
+        alert.view.tintColor = alertTintColor
         
         let yesAction = UIAlertAction(title: "ShowFeedbackAlert_YesAction".localized(), style: .default) { action in
             onFeedback()
@@ -121,7 +141,7 @@ public class RatingProvider {
         alert.addAction(noAction)
         
         let laterAction = UIAlertAction(title: "ShowFeedbackAlert_LaterAction".localized(), style: .cancel) { action in
-            Defaults[.appStarts] = 0
+            self.reset()
         }
         
         alert.addAction(laterAction)

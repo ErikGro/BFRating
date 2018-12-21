@@ -18,7 +18,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  BFRating: 307806d7f5d24aea3a39c1b3e2bfb977847aa710
+  BFRating: bcc4390b15b33579628db70370eb5ebf2de4625d
   Localize-Swift: c798ec9286494866f7068f85f7c71283ac5bdab4
   SwiftyUserDefaults: cebe0ff9472f52699772a514b6f7155861d8069b
 
