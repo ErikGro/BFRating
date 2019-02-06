@@ -60,13 +60,9 @@ public class RatingProvider {
             return
         }
         
-        if Defaults[.firstTimestamp] + (showAfterDays * dayInSeconds) > Int(NSDate().timeIntervalSince1970) {
-            return
-        }
-        
         Defaults[.appStarts] += 1
         
-        if Defaults[.appStarts] == showAfterViewCount {
+        if Defaults[.appStarts] == showAfterViewCount || Defaults[.firstTimestamp] + (showAfterDays * dayInSeconds) <= Int(NSDate().timeIntervalSince1970) {
             Defaults[.appStarts] = -1
             
             showLikeAlert {
