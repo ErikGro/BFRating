@@ -54,35 +54,33 @@ public class RatingProvider {
         
         self.controller = controller
         
-        setup()
-        
         if Defaults[.appStarts] == -1 {
             return
         }
         
         Defaults[.appStarts] += 1
         
-        if Defaults[.appStarts] == showAfterViewCount || Defaults[.firstTimestamp] + (showAfterDays * dayInSeconds) <= Int(NSDate().timeIntervalSince1970) {
-            Defaults[.appStarts] = -1
-            
-            showLikeAlert {
-                onFeedback()
-            }
+        if Defaults[.appStarts] == showAfterViewCount {
+            like()
+            return
+        }
+        
+        if Defaults[.firstTimestamp] + (showAfterDays * dayInSeconds) <= Date().timeIntervalSince1970 {
+            like()
+            return
         }
     }
 
     public func reset() {
         Defaults[.appStarts] = 0
-        Defaults[.firstTimestamp] = Int(NSDate().timeIntervalSince1970)
+        Defaults[.firstTimestamp] = Date().timeIntervalSince1970
     }
     
-    private func setup() {
-        if !Defaults.hasKey(.appStarts) {
-            Defaults[.appStarts] = 0
-        }
+    private func like() {
+        Defaults[.appStarts] = -1
         
-        if !Defaults.hasKey(.firstTimestamp) {
-            Defaults[.firstTimestamp] = Int(NSDate().timeIntervalSince1970)
+        showLikeAlert {
+            onFeedback()
         }
     }
     
