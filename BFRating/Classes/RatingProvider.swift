@@ -61,8 +61,13 @@ public class RatingProvider {
         Defaults[.appStarts] += 1
         
         if Defaults[.appStarts] >= showAfterViewCount
-            && Defaults[.firstTimestamp] + (showAfterDays * dayInSeconds) <= Date().timeIntervalSince1970 {
-            like()
+            && Defaults[.firstTimestamp] + Double(showAfterDays * dayInSeconds) <= Date().timeIntervalSince1970 {
+            Defaults[.appStarts] = -1
+            
+            showLikeAlert {
+                onFeedback()
+            }
+            
             return
         }
     }
@@ -70,14 +75,6 @@ public class RatingProvider {
     public func reset() {
         Defaults[.appStarts] = 0
         Defaults[.firstTimestamp] = Date().timeIntervalSince1970
-    }
-    
-    private func like() {
-        Defaults[.appStarts] = -1
-        
-        showLikeAlert {
-            onFeedback()
-        }
     }
     
     private func showLikeAlert(onFeedback: @escaping() -> ()) {
