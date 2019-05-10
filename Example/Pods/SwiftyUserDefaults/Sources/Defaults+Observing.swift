@@ -24,36 +24,11 @@
 
 import Foundation
 
-// DefaultsKey
+#if !os(Linux)
 public extension UserDefaults {
 
-    subscript<T: DefaultsSerializable>(key: DefaultsKey<T?>) -> T.T? {
-        get {
-            if let value = T._defaults.get(key: key._key, userDefaults: self) {
-                return value
-            } else if let defaultValue = key.defaultValue as? T.T {
-                return defaultValue
-            } else {
-                return nil
-            }
-        }
-        set {
-            T._defaults.save(key: key._key, value: newValue, userDefaults: self)
-        }
-    }
-
-    subscript<T: DefaultsSerializable>(key: DefaultsKey<T>) -> T.T where T.T == T {
-        get {
-            if let value = T._defaults.get(key: key._key, userDefaults: self) {
-                return value
-            } else if let defaultValue = key.defaultValue {
-                return defaultValue
-            } else {
-                fatalError("Shouldn't happen, please report!")
-            }
-        }
-        set {
-            T._defaults.save(key: key._key, value: newValue, userDefaults: self)
-        }
+    func observe<T: DefaultsSerializable>(key: DefaultsKey<T>, options: NSKeyValueObservingOptions = [.old, .new], handler: @escaping (DefaultsObserver<T>.Update) -> Void) -> DefaultsDisposable {
+        return DefaultsObserver(key: key, userDefaults: self, options: options, handler: handler)
     }
 }
+#endif

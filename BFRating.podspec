@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'BFRating'
-  s.version          = '1.0.1'
+  s.version          = '1.0.2'
   s.summary          = 'BFRating enhances the rating process of your app. With this library you only get the most positiv ratings!'
 
 # This description is used to generate tags and improve search results.
@@ -39,6 +39,6 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'SwiftyUserDefaults', '4.0.0-alpha.1'
+  s.dependency 'SwiftyUserDefaults'
   s.dependency 'Localize-Swift'
 end

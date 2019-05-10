@@ -32,8 +32,8 @@
 /* General */
 "Yes" = "Yes";
 "No" = "No";
-"ShowLikeAlert_Message" = "Gefällt dir %@ bisher?";
-"ShowFeedbackAlert_Message" = "Würdest du uns gerne Feedback geben?";
-"ShowFeedbackAlert_YesAction" = "Ja, sicher!";
-"ShowFeedbackAlert_NoAction" = "Nicht mehr nachfragen";
-"ShowFeedbackAlert_LaterAction" = "Später";
+"ShowLikeAlert_Message" = "Do you like %@ so far?";
+"ShowFeedbackAlert_Message" = "Would you like to give feedback?";
+"ShowFeedbackAlert_YesAction" = "Yes, of course!";
+"ShowFeedbackAlert_NoAction" = "Not ask anymore";
+"ShowFeedbackAlert_LaterAction" = "Later";

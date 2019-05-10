@@ -24,36 +24,17 @@
 
 import Foundation
 
-// DefaultsKey
-public extension UserDefaults {
-
-    subscript<T: DefaultsSerializable>(key: DefaultsKey<T?>) -> T.T? {
-        get {
-            if let value = T._defaults.get(key: key._key, userDefaults: self) {
-                return value
-            } else if let defaultValue = key.defaultValue as? T.T {
-                return defaultValue
-            } else {
-                return nil
-            }
-        }
-        set {
-            T._defaults.save(key: key._key, value: newValue, userDefaults: self)
-        }
-    }
-
-    subscript<T: DefaultsSerializable>(key: DefaultsKey<T>) -> T.T where T.T == T {
-        get {
-            if let value = T._defaults.get(key: key._key, userDefaults: self) {
-                return value
-            } else if let defaultValue = key.defaultValue {
-                return defaultValue
-            } else {
-                fatalError("Shouldn't happen, please report!")
-            }
-        }
-        set {
-            T._defaults.save(key: key._key, value: newValue, userDefaults: self)
+// We don't want to use `NSString.boolValue` as it's converting every miss to `false`, instead of `nil`
+internal extension String {
+    var bool: Bool? {
+        switch self.lowercased() {
+        case "true", "t", "yes", "y", "1":
+            return true
+        case "false", "f", "no", "n", "0":
+            return false
+        default:
+            return nil
         }
     }
 }
+
