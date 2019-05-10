@@ -60,12 +60,8 @@ public class RatingProvider {
         
         Defaults[.appStarts] += 1
         
-        if Defaults[.appStarts] == showAfterViewCount {
-            like()
-            return
-        }
-        
-        if Defaults[.firstTimestamp] + (showAfterDays * dayInSeconds) <= Date().timeIntervalSince1970 {
+        if Defaults[.appStarts] >= showAfterViewCount
+            && Defaults[.firstTimestamp] + (showAfterDays * dayInSeconds) <= Date().timeIntervalSince1970 {
             like()
             return
         }
