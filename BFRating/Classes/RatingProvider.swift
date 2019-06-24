@@ -38,21 +38,20 @@ public class RatingProvider {
     
     private let dayInSeconds: Int = 86400
     
-    private var controller: UIViewController!
+    private var controller: UIViewController
     
-    public var showAfterViewCount: Int = 5
+    private var tintColor: UIColor
     
-    public var showAfterDays: Int = 14
-    
-    public var alertTintColor: UIColor = UIColor.blue
-    
-    public init() {
+    public init(controller: UIViewController, tintColor: UIColor = .blue) {
+        self.controller = controller
+        self.tintColor = tintColor
     }
     
-    public func show(_ controller: UIViewController,
-                onFeedback: @escaping() -> ()) {
-        
-        self.controller = controller
+    public func showRatingDialog(afterDays days: Int = 14,
+                                 afterViewCount viewCounts: Int = 5,
+                                 onYesFeedback: (() -> Void)? = nil,
+                                 onLaterFeedback: (() -> Void)? = nil,
+                                 onNoFeedback: (() -> Void)? = nil) {
         
         if Defaults[.appStarts] == -1 {
             return
@@ -60,13 +59,13 @@ public class RatingProvider {
         
         Defaults[.appStarts] += 1
         
-        if Defaults[.appStarts] >= showAfterViewCount
-            && Defaults[.firstTimestamp] + Double(showAfterDays * dayInSeconds) <= Date().timeIntervalSince1970 {
+        if Defaults[.appStarts] >= days
+            && Defaults[.firstTimestamp] + Double(viewCounts * dayInSeconds) <= Date().timeIntervalSince1970 {
             Defaults[.appStarts] = -1
             
-            showLikeAlert {
-                onFeedback()
-            }
+            showLikeAlert(onYesFeedback: onYesFeedback,
+                          onLaterFeedback: onLaterFeedback,
+                          onNoFeedback: onNoFeedback)
             
             return
         }
@@ -77,7 +76,50 @@ public class RatingProvider {
         Defaults[.firstTimestamp] = Date().timeIntervalSince1970
     }
     
-    private func showLikeAlert(onFeedback: @escaping() -> ()) {
+    public func showRatingDialogOnClick(onYesFeedback: (() -> Void)? = nil,
+                                        onLaterFeedback: (() -> Void)? = nil,
+                                        onNoFeedback: (() -> Void)? = nil) {
+        showLikeAlert(onYesFeedback: onYesFeedback,
+                      onLaterFeedback: onLaterFeedback,
+                      onNoFeedback: onNoFeedback)
+    }
+    
+    public func showRatingDialog(customValues values: [Int],
+                                 onYesFeedback: (() -> Void)? = nil,
+                                 onLaterFeedback: (() -> Void)? = nil,
+                                 onNoFeedback: (() -> Void)? = nil) {
+        let customValues = Defaults[.customValues]
+        
+        if compare(values1: customValues, values2: values) {
+            showLikeAlert(onYesFeedback: onYesFeedback, onLaterFeedback: onLaterFeedback, onNoFeedback: onNoFeedback)
+        }
+    }
+    
+    fileprivate func compare(values1: [Int], values2: [Int]) -> Bool {
+        if values1.count != values2.count {
+            return false
+        }
+        
+        for (index, element) in values1.enumerated() {
+            if (element < values2[index]) {
+                return false
+            }
+        }
+        
+        return true
+    }
+    
+    public func setUserValues(_ values: [Int]) {
+        Defaults[.customValues] = values
+    }
+    
+    public func resetUserValues() {
+        Defaults[.customValues] = []
+    }
+    
+    private func showLikeAlert(onYesFeedback: (() -> Void)? = nil,
+                               onLaterFeedback: (() -> Void)? = nil,
+                               onNoFeedback: (() -> Void)? = nil) {
         guard var appName = Bundle.main.infoDictionary?["CFBundleName"] as? String else {
             return
         }
@@ -89,12 +131,10 @@ public class RatingProvider {
         let alert = UIAlertController(title: nil,
                                       message: String(format: "ShowLikeAlert_Message".localized(), appName),
                                       preferredStyle: .alert)
-        alert.view.tintColor = alertTintColor
+        alert.view.tintColor = tintColor
         
         let noAction = UIAlertAction(title: "No".localized(), style: .cancel) { action in
-            self.showFeedbackAlert(onFeedback: {
-                onFeedback()
-            })
+            self.showFeedbackAlert(onYesFeedback: onYesFeedback, onLaterFeedback: onLaterFeedback, onNoFeedback: onNoFeedback)
         }
         
         alert.addAction(noAction)
@@ -109,26 +149,40 @@ public class RatingProvider {
         controller.present(alert, animated: true, completion: nil)
     }
     
-    private func showFeedbackAlert(onFeedback: @escaping() -> ()) {
+    private func showFeedbackAlert(onYesFeedback: (() -> Void)? = nil,
+                                   onLaterFeedback: (() -> Void)? = nil,
+                                   onNoFeedback: (() -> Void)? = nil) {
         let alert = UIAlertController(title: nil,
                                       message: "ShowFeedbackAlert_Message".localized(),
                                       preferredStyle: .alert)
-        alert.view.tintColor = alertTintColor
+        alert.view.tintColor = tintColor
         
         let yesAction = UIAlertAction(title: "ShowFeedbackAlert_YesAction".localized(), style: .default) { action in
-            onFeedback()
+            SKStoreReviewController.requestReview()
+        
+            if let positive = onYesFeedback {
+                positive()
+            }
         }
         
         alert.addAction(yesAction)
         
         let noAction = UIAlertAction(title: "ShowFeedbackAlert_NoAction".localized(), style: .default) { action in
             Defaults[.appStarts] = -1
+            
+            if let negative = onNoFeedback {
+                negative()
+            }
         }
         
         alert.addAction(noAction)
         
         let laterAction = UIAlertAction(title: "ShowFeedbackAlert_LaterAction".localized(), style: .cancel) { action in
             self.reset()
+            
+            if let later = onLaterFeedback {
+                later()
+            }
         }
         
         alert.addAction(laterAction)

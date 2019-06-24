@@ -34,6 +34,6 @@ import SwiftyUserDefaults
 extension DefaultsKeys {
     
     static let appStarts = DefaultsKey<Int>("appStarts", defaultValue: 0)
-    
     static let firstTimestamp = DefaultsKey<Double>("firstTimestamp", defaultValue: Date().timeIntervalSince1970)
+    static let customValues = DefaultsKey<[Int]>("customValues", defaultValue: [])
 }

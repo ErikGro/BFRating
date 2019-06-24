@@ -6,6 +6,5 @@ target 'BFRating_Example' do
 
   target 'BFRating_Tests' do
     inherit! :search_paths
-
   end
 end
