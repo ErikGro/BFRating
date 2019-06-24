@@ -19,15 +19,55 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let ratingProvider = RatingProvider()
+        let ratingProvider = RatingProvider(controller: self)
+        
+        // Customize days, view count and alert color
         ratingProvider.alertTintColor = UIColor.green //Default value UIColor.blue
         ratingProvider.showAfterDays = 10 // Default value 14
         ratingProvider.showAfterViewCount = 3 // Default value 5
-        ratingProvider.show(self) {
+        
+        // Customize alert directly in function
+        ratingProvider.showRatingDialog(afterDays: 10, afterViewCount: 3, withColor: .green, onYesFeedback: nil, onLaterFeedback: nil) {
             if MFMailComposeViewController.canSendMail() {
                 let mail = MFMailComposeViewController()
                 self.present(mail, animated: true)
             }
         }
+        
+        // Call rating dialog
+        ratingProvider.showRatingDialogOnClick(onYesFeedback: {
+            debugPrint("User clicks on Yes")
+            // Do something here
+        }, onLaterFeedback: {
+            debugPrint("User clicks on Later")
+            // Ask user to rate app again later
+        }, onNoFeedback: {
+            debugPrint("User clicks on No")
+            // Open support chat or
+            // Open MailComposer to write a feedback
+            
+            if MFMailComposeViewController.canSendMail() {
+                let mail = MFMailComposeViewController()
+                self.present(mail, animated: true)
+            }
+        })
+        
+        // Call rating dialog after custom values
+        let gamePlayed = 3
+        let boughtItems = 1
+        
+        ratingProvider.showRatingDialog(afterCustomValue: gamePlayed, value2: boughtItems, onYesFeedback: nil, onLaterFeedback: {
+            // Reset user values
+            ratingProvider.resetUserValues()
+        }, onNoFeedback: {
+            // Show support chat and reset user values
+            ratingProvider.resetUserValues()
+        })
+        
+        // F.e. user has played 3 games and bought 1 item
+        // Set values with function:
+        
+        ratingProvider.setUserValues(value1: 3, value2: 1)
+        // Then ratingProvider.showRatingDialogAfterCustomValue will be called
     }
 }
