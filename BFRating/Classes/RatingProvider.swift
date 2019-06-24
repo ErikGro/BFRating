@@ -50,9 +50,9 @@ public class RatingProvider {
         self.controller = controller
     }
     
-    public func showRatingDialog(afterDays days: Int? = nil,
-                                 afterViewCount viewCounts: Int? = nil,
-                                 withColor tintColor: UIColor? = nil,
+    public func showRatingDialog(afterDays days: Int? = 14,
+                                 afterViewCount viewCounts: Int? = 5,
+                                 withColor tintColor: UIColor? = .blue,
                                  onYesFeedback: (() -> Void)? = nil,
                                  onLaterFeedback: (() -> Void)? = nil,
                                  onNoFeedback: (() -> Void)? = nil) {
@@ -60,10 +60,6 @@ public class RatingProvider {
         if Defaults[.appStarts] == -1 {
             return
         }
-        
-        showAfterDays = days ?? 14
-        showAfterViewCount = viewCounts ?? 5
-        alertTintColor = tintColor ?? .blue
         
         Defaults[.appStarts] += 1
         
