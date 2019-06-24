@@ -19,15 +19,14 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let ratingProvider = RatingProvider(controller: self)
-        
-        // Customize days, view count and alert color
-        ratingProvider.alertTintColor = UIColor.green //Default value UIColor.blue
-        ratingProvider.showAfterDays = 10 // Default value 14
-        ratingProvider.showAfterViewCount = 3 // Default value 5
+        let ratingProvider = RatingProvider(controller: self,
+                                            tintColor: .green)
         
         // Customize alert directly in function
-        ratingProvider.showRatingDialog(afterDays: 10, afterViewCount: 3, withColor: .green, onYesFeedback: nil, onLaterFeedback: nil) {
+        ratingProvider.showRatingDialog(afterDays: 10,
+                                        afterViewCount: 3,
+                                        onYesFeedback: nil,
+                                        onLaterFeedback: nil) {
             if MFMailComposeViewController.canSendMail() {
                 let mail = MFMailComposeViewController()
                 self.present(mail, animated: true)
@@ -56,7 +55,8 @@ class ViewController: UIViewController {
         let gamePlayed = 3
         let boughtItems = 1
         
-        ratingProvider.showRatingDialog(afterCustomValue: gamePlayed, value2: boughtItems, onYesFeedback: nil, onLaterFeedback: {
+        ratingProvider.showRatingDialog(customValues: [gamePlayed, boughtItems],
+                                        onLaterFeedback: {
             // Reset user values
             ratingProvider.resetUserValues()
         }, onNoFeedback: {
@@ -67,7 +67,7 @@ class ViewController: UIViewController {
         // F.e. user has played 3 games and bought 1 item
         // Set values with function:
         
-        ratingProvider.setUserValues(value1: 3, value2: 1)
+        ratingProvider.setUserValues([3, 1])
         // Then ratingProvider.showRatingDialogAfterCustomValue will be called
     }
 }

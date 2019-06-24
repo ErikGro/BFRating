@@ -16,15 +16,10 @@ Before you start we can recommend to read the [bloc article](https://www.bitfact
 
 First you have to initialize the RatingProvider. Then you can call the `showRatingDialog()` function from any `UIViewController`.
 ```swift
-let ratingProvider = RatingProvider(controller: self)
-
-// Customize days, view count and alert color
-ratingProvider.alertTintColor = UIColor.green //Default value UIColor.blue
-ratingProvider.showAfterDays = 10 // Default value 14
-ratingProvider.showAfterViewCount = 3 // Default value 5
+let ratingProvider = RatingProvider(controller: self, tintColor: .green) //Default value UIColor.blue
 
 // Customize alert directly in function
-ratingProvider.showRatingDialog(afterDays: 10, afterViewCount: 3, withColor: .green, onYesFeedback: nil, onLaterFeedback: nil) {
+ratingProvider.showRatingDialog(afterDays: 10, afterViewCount: 3, onYesFeedback: nil, onLaterFeedback: nil) {
     //Eg. show MFMailComposeViewController to get user feedback
 }
 ```
@@ -43,13 +38,13 @@ ratingProvider.showRatingDialogOnClick(onYesFeedback: {
 })
 ```
 
-You can set up to 3 variables, to let rating provider appear after variables gets right values.
+You can set up an array of custom variables, to let rating provider appear after variables gets valid values.
 ```swift
 // Call rating dialog after custom values
 let gamePlayed = 3
 let boughtItems = 1
 
-ratingProvider.showRatingDialog(afterCustomValue: gamePlayed, value2: boughtItems, onYesFeedback: nil, onLaterFeedback: {
+ratingProvider.showRatingDialog(customValues: [gamePlayed, boughtItems], onLaterFeedback: {
 // Reset user values
     ratingProvider.resetUserValues()
 }, onNoFeedback: {
@@ -60,11 +55,11 @@ ratingProvider.showRatingDialog(afterCustomValue: gamePlayed, value2: boughtItem
 // F.e. user has played 3 games and bought 1 item
 // Set values with function:
 
-ratingProvider.setUserValues(value1: 3, value2: 1)
+ratingProvider.setUserValues([3, 1])
 // Then ratingProvider.showRatingDialogAfterCustomValue will be called
 }
 ```
-`resetUserValues()` function will reset uservalues to 0.
+`resetUserValues()` function will reset uservalues to [].
 
 ## Installation
 

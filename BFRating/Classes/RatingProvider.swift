@@ -40,19 +40,15 @@ public class RatingProvider {
     
     private var controller: UIViewController
     
-    public var showAfterViewCount: Int = 5
+    private var tintColor: UIColor
     
-    public var showAfterDays: Int = 14
-    
-    public var alertTintColor: UIColor = UIColor.blue
-    
-    public init(controller: UIViewController) {
+    public init(controller: UIViewController, tintColor: UIColor = .blue) {
         self.controller = controller
+        self.tintColor = tintColor
     }
     
-    public func showRatingDialog(afterDays days: Int? = 14,
-                                 afterViewCount viewCounts: Int? = 5,
-                                 withColor tintColor: UIColor? = .blue,
+    public func showRatingDialog(afterDays days: Int = 14,
+                                 afterViewCount viewCounts: Int = 5,
                                  onYesFeedback: (() -> Void)? = nil,
                                  onLaterFeedback: (() -> Void)? = nil,
                                  onNoFeedback: (() -> Void)? = nil) {
@@ -63,11 +59,13 @@ public class RatingProvider {
         
         Defaults[.appStarts] += 1
         
-        if Defaults[.appStarts] >= showAfterViewCount
-            && Defaults[.firstTimestamp] + Double(showAfterDays * dayInSeconds) <= Date().timeIntervalSince1970 {
+        if Defaults[.appStarts] >= days
+            && Defaults[.firstTimestamp] + Double(viewCounts * dayInSeconds) <= Date().timeIntervalSince1970 {
             Defaults[.appStarts] = -1
             
-            showLikeAlert(onYesFeedback: onYesFeedback, onLaterFeedback: onLaterFeedback, onNoFeedback: onNoFeedback)
+            showLikeAlert(onYesFeedback: onYesFeedback,
+                          onLaterFeedback: onLaterFeedback,
+                          onNoFeedback: onNoFeedback)
             
             return
         }
@@ -81,42 +79,42 @@ public class RatingProvider {
     public func showRatingDialogOnClick(onYesFeedback: (() -> Void)? = nil,
                                         onLaterFeedback: (() -> Void)? = nil,
                                         onNoFeedback: (() -> Void)? = nil) {
-        showLikeAlert(onYesFeedback: onYesFeedback, onLaterFeedback: onLaterFeedback, onNoFeedback: onNoFeedback)
+        showLikeAlert(onYesFeedback: onYesFeedback,
+                      onLaterFeedback: onLaterFeedback,
+                      onNoFeedback: onNoFeedback)
     }
     
-    public func showRatingDialog(afterCustomValue value1: Int? = nil,
-                                 value2: Int? = nil,
-                                 value3: Int? = nil,
+    public func showRatingDialog(customValues values: [Int],
                                  onYesFeedback: (() -> Void)? = nil,
                                  onLaterFeedback: (() -> Void)? = nil,
                                  onNoFeedback: (() -> Void)? = nil) {
-        let userValue1 = Defaults[.userValue1]
-        let userValue2 = Defaults[.userValue2]
-        let userValue3 = Defaults[.userValue3]
+        let customValues = Defaults[.customValues]
         
-        if userValue1 >= value1 ?? 0 && userValue2 >= value2 ?? 0 && userValue3 >= value3 ?? 0 {
+        if compare(values1: customValues, values2: values) {
             showLikeAlert(onYesFeedback: onYesFeedback, onLaterFeedback: onLaterFeedback, onNoFeedback: onNoFeedback)
         }
     }
     
-    public func setUserValues(value1: Int? = nil, value2: Int? = nil, value3: Int? = nil) {
-        if let value1 = value1 {
-            Defaults[.userValue1] = value1
+    fileprivate func compare(values1: [Int], values2: [Int]) -> Bool {
+        if values1.count != values2.count {
+            return false
         }
         
-        if let value2 = value2 {
-            Defaults[.userValue2] = value2
+        for (index, element) in values1.enumerated() {
+            if (element < values2[index]) {
+                return false
+            }
         }
         
-        if let value3 = value3 {
-            Defaults[.userValue3] = value3
-        }
+        return true
+    }
+    
+    public func setUserValues(_ values: [Int]) {
+        Defaults[.customValues] = values
     }
     
     public func resetUserValues() {
-        Defaults[.userValue1] = 0
-        Defaults[.userValue2] = 0
-        Defaults[.userValue3] = 0
+        Defaults[.customValues] = []
     }
     
     private func showLikeAlert(onYesFeedback: (() -> Void)? = nil,
@@ -133,7 +131,7 @@ public class RatingProvider {
         let alert = UIAlertController(title: nil,
                                       message: String(format: "ShowLikeAlert_Message".localized(), appName),
                                       preferredStyle: .alert)
-        alert.view.tintColor = alertTintColor
+        alert.view.tintColor = tintColor
         
         let noAction = UIAlertAction(title: "No".localized(), style: .cancel) { action in
             self.showFeedbackAlert(onYesFeedback: onYesFeedback, onLaterFeedback: onLaterFeedback, onNoFeedback: onNoFeedback)
@@ -157,7 +155,7 @@ public class RatingProvider {
         let alert = UIAlertController(title: nil,
                                       message: "ShowFeedbackAlert_Message".localized(),
                                       preferredStyle: .alert)
-        alert.view.tintColor = alertTintColor
+        alert.view.tintColor = tintColor
         
         let yesAction = UIAlertAction(title: "ShowFeedbackAlert_YesAction".localized(), style: .default) { action in
             SKStoreReviewController.requestReview()
