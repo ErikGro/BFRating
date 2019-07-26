@@ -158,8 +158,6 @@ public class RatingProvider {
         alert.view.tintColor = tintColor
         
         let yesAction = UIAlertAction(title: "ShowFeedbackAlert_YesAction".localized(), style: .default) { action in
-            SKStoreReviewController.requestReview()
-        
             if let positive = onYesFeedback {
                 positive()
             }

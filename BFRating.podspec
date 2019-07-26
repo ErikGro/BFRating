@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'BFRating'
-  s.version          = '1.0.3'
+  s.version          = '1.0.4'
   s.summary          = 'BFRating enhances the rating process of your app. With this library you only get the most positiv ratings!'
 
 # This description is used to generate tags and improve search results.
