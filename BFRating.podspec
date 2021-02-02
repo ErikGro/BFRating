@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Matthias Nagel' => 'matthias@bitfactory.io' }
   s.source           = { :git => 'https://github.com/bitfactoryio/BFRating.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/bitfactoryio'
-  s.swift_version = '5.0'
+  s.swift_version = '5.1'
 
   s.ios.deployment_target = '11.0'
 

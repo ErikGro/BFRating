@@ -1,15 +1,21 @@
 PODS:
-  - BFRating (1.0.2):
+  - BFRating (1.0.4):
     - Localize-Swift
     - SwiftyUserDefaults
-  - Localize-Swift (2.0.0)
-  - SwiftyUserDefaults (4.0.0)
+  - Localize-Swift (3.2.0):
+    - Localize-Swift/LocalizeSwiftCore (= 3.2.0)
+    - Localize-Swift/UIKit (= 3.2.0)
+  - Localize-Swift/LocalizeSwiftCore (3.2.0)
+  - Localize-Swift/UIKit (3.2.0):
+    - Localize-Swift/LocalizeSwiftCore
+  - SwiftyUserDefaults (5.1.0)
 
 DEPENDENCIES:
   - BFRating (from `../`)
+  - Localize-Swift (~> 3.2)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - Localize-Swift
     - SwiftyUserDefaults
 
@@ -18,10 +24,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  BFRating: 4728cbc8801a344b297a4cf21e118c3c313e0d35
-  Localize-Swift: c798ec9286494866f7068f85f7c71283ac5bdab4
-  SwiftyUserDefaults: 6a1951df1daa19337862b677dd9a4b9bd4c288cd
+  BFRating: 5350f521281bca0786a2827e0114ea1b887a7e88
+  Localize-Swift: 6f4475136bdb0d7b2882ea3d4ea919d70142b232
+  SwiftyUserDefaults: 6746ede7f29e4c1bf2b1e104eb3139c5928e44d1
 
-PODFILE CHECKSUM: 3fd5be3be21286a24e205ff8cf663ddcf5cf8281
+PODFILE CHECKSUM: 129eafd282a5306ba0f523546e1f8f3704ba837c
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.10.1

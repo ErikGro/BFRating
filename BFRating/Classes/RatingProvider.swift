@@ -53,15 +53,15 @@ public class RatingProvider {
                                  onLaterFeedback: (() -> Void)? = nil,
                                  onNoFeedback: (() -> Void)? = nil) {
         
-        if Defaults[.appStarts] == -1 {
+        if Defaults[\.appStarts] == -1 {
             return
         }
         
-        Defaults[.appStarts] += 1
+        Defaults[\.appStarts] += 1
         
-        if Defaults[.appStarts] >= days
-            && Defaults[.firstTimestamp] + Double(viewCounts * dayInSeconds) <= Date().timeIntervalSince1970 {
-            Defaults[.appStarts] = -1
+        if Defaults[\.appStarts] >= days
+            && Defaults[\.firstTimestamp] + Double(viewCounts * dayInSeconds) <= Date().timeIntervalSince1970 {
+            Defaults[\.appStarts] = -1
             
             showLikeAlert(onYesFeedback: onYesFeedback,
                           onLaterFeedback: onLaterFeedback,
@@ -72,8 +72,8 @@ public class RatingProvider {
     }
 
     public func reset() {
-        Defaults[.appStarts] = 0
-        Defaults[.firstTimestamp] = Date().timeIntervalSince1970
+        Defaults[\.appStarts] = 0
+        Defaults[\.firstTimestamp] = Date().timeIntervalSince1970
     }
     
     public func showRatingDialogOnClick(onYesFeedback: (() -> Void)? = nil,
@@ -88,7 +88,7 @@ public class RatingProvider {
                                  onYesFeedback: (() -> Void)? = nil,
                                  onLaterFeedback: (() -> Void)? = nil,
                                  onNoFeedback: (() -> Void)? = nil) {
-        let customValues = Defaults[.customValues]
+        let customValues = Defaults[\.customValues]
         
         if compare(values1: customValues, values2: values) {
             showLikeAlert(onYesFeedback: onYesFeedback, onLaterFeedback: onLaterFeedback, onNoFeedback: onNoFeedback)
@@ -110,11 +110,11 @@ public class RatingProvider {
     }
     
     public func setUserValues(_ values: [Int]) {
-        Defaults[.customValues] = values
+        Defaults[\.customValues] = values
     }
     
     public func resetUserValues() {
-        Defaults[.customValues] = []
+        Defaults[\.customValues] = []
     }
     
     private func showLikeAlert(onYesFeedback: (() -> Void)? = nil,
@@ -166,7 +166,7 @@ public class RatingProvider {
         alert.addAction(yesAction)
         
         let noAction = UIAlertAction(title: "ShowFeedbackAlert_NoAction".localized(), style: .default) { action in
-            Defaults[.appStarts] = -1
+            Defaults[\.appStarts] = -1
             
             if let negative = onNoFeedback {
                 negative()

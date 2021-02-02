@@ -1,9 +1,11 @@
-platform :ios, '11.0'
+platform :ios, '13.0'
+install! 'cocoapods', :warn_for_unused_master_specs_repo => false
 use_frameworks!
 
 target 'BFRating_Example' do
   pod 'BFRating', :path => '../'
-
+  pod 'Localize-Swift', '~> 3.2'
+  
   target 'BFRating_Tests' do
     inherit! :search_paths
   end
