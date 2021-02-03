@@ -1,12 +1,17 @@
 # BFRating
 
 [![Version](https://img.shields.io/cocoapods/v/BFRating.svg?style=flat)](https://cocoapods.org/pods/BFRating)
-[![License](https://img.shields.io/cocoapods/l/BFRating.svg?style=flat)](https://cocoapods.org/pods/BFRating)
 [![Platform](https://img.shields.io/cocoapods/p/BFRating.svg?style=flat)](https://cocoapods.org/pods/BFRating)
+![Swift version](https://img.shields.io/badge/swift-5.1-orange.svg)
+[![License](https://img.shields.io/cocoapods/l/BFRating.svg?style=flat)](https://cocoapods.org/pods/BFRating)
 
-## Example
+## Example Project
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+To run the example project, clone the repo, and open the workspace `Example/BFRating.xcworkspace` in XCode.
+
+## Requirements
+- iOS 11.0+
+- Swift 5.1
 
 ## Usage
 
